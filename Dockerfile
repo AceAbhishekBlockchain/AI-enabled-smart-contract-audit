@@ -1,40 +1,36 @@
-# ──────────
-# Stage 1: Build the Vite/React app
-# ──────────
+# ─────────────────────────────────────────────────────
+# Stage 1: Build the Vite/React app into /app/dist
+# ─────────────────────────────────────────────────────
 FROM node:20-alpine AS builder
 
-# Create app directory
 WORKDIR /app
 
-# Copy only package.json and lockfile to install dependencies
-COPY package.json package-lock.json ./
-
 # Install dependencies
+COPY package.json package-lock.json ./
 RUN npm ci
 
-# Copy the rest of the source code
+# Copy source & build
 COPY . .
-
-# Build the production‐ready static files
 RUN npm run build
+# At the end of this stage, /app/dist contains your static files
 
-# ──────────
-# Stage 2: Serve with Nginx
-# ──────────
+
+# ─────────────────────────────────────────────────────
+# Stage 2: Serve “/app/dist” with Nginx on port 8080
+# ─────────────────────────────────────────────────────
 FROM nginx:stable-alpine
 
-# Remove default Nginx static assets
+# Remove default Nginx “html” folder
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy built files from the builder stage
+# Copy built files from the builder
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy a minimal custom nginx.conf (optional; you can skip this if defaults are fine)
-# If you want client-side routing (React Router), add try_files etc.:
-# COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Copy our custom nginx.conf that listens on 8080
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
-EXPOSE 80
+# Expose port 8080 (Cloud Run will route to $PORT=8080)
+EXPOSE 8080
 
-# Start Nginx
+# Start Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
