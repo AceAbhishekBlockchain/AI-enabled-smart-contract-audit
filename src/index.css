@@ -1,0 +1,105 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222.2 84% 4.9%; /* Dark blue-gray */
+    --foreground: 210 40% 98%; /* Almost white */
+    --card: 224 71% 4%; /* Slightly darker blue-gray for cards */
+    --card-foreground: 210 40% 98%;
+    --popover: 224 71% 4%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 173 90% 40%; /* Emerald Green */
+    --primary-foreground: 210 40% 98%;
+    --secondary: 193 90% 45%; /* Cyan */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%; /* Muted blue-gray */
+    --muted-foreground: 215 20.2% 65.1%; /* Lighter gray */
+    --accent: 200 80% 55%; /* Sky Blue */
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 70% 50%; /* Red */
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 27.5%; /* Slightly lighter border */
+    --input: 217.2 32.6% 27.5%;
+    --ring: 173 80% 60%; /* Lighter Emerald for focus rings */
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer utilities {
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+  }
+  
+  .glass-effect {
+    background: rgba(30, 41, 59, 0.5); /* Darker glass effect: bg-slate-800 with opacity */
+    backdrop-filter: blur(12px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  }
+  
+  .neon-glow {
+    box-shadow: 0 0 15px rgba(var(--primary), 0.4), 0 0 30px rgba(var(--secondary), 0.3);
+  }
+  
+  .floating-animation {
+    animation: float 8s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+  }
+  
+  .pulse-glow {
+    animation: pulse-glow 2.5s ease-in-out infinite alternate;
+  }
+  
+  @keyframes pulse-glow {
+    from { box-shadow: 0 0 10px rgba(var(--primary), 0.2), 0 0 20px rgba(var(--secondary), 0.1); }
+    to { box-shadow: 0 0 25px rgba(var(--primary), 0.6), 0 0 40px rgba(var(--secondary), 0.4); }
+  }
+
+  .pattern-dots {
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: calc(10 * 1px) calc(10 * 1px);
+  }
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Custom scrollbar for better aesthetics in dark mode */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--muted);
+  border-radius: var(--radius);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: var(--radius);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
